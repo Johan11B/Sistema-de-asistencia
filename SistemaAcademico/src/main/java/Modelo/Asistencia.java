@@ -3,90 +3,70 @@ package Modelo;
 import java.util.ArrayList;
 
 public class Asistencia {
-    private String fecha = ""; // formato aaaa/mm/dd
-    private String hora_de_inicio = "";
-    private String hora_final = "";
-    private ArrayList<String> codigos = new ArrayList<String>();
-    private ArrayList<String> estados = new ArrayList<String>(); // 0: A tiempo, 1: tarde, 2: no llegó
+    private String fecha;
+    private String horaInicio;
+    private String horaFinal;
+    private ArrayList<String> tiposDocumentos = new ArrayList<>();
+    private ArrayList<String> numerosDocumentos = new ArrayList<>();
+    private ArrayList<String> estados = new ArrayList<>();
 
-    public Asistencia() {
-        // Constructor vacío
-    }
-
-    public Asistencia(String fecha, String hora_de_inicio, String hora_final) {
+    public Asistencia(String fecha, String horaInicio, String horaFinal) {
         this.fecha = fecha;
-        this.hora_de_inicio = hora_de_inicio;
-        this.hora_final = hora_final;
+        this.horaInicio = horaInicio.length() == 1 ? "0" + horaInicio + ":00" : horaInicio;
+        this.horaFinal = horaFinal;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public void setHora_de_inicio(String hora_de_inicio) {
-        this.hora_de_inicio = hora_de_inicio;
-    }
-
-    public void setHora_final(String hora_final) {
-        this.hora_final = hora_final;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public String getHora_de_inicio() {
-        return hora_de_inicio;
-    }
-
-    public String getHora_final() {
-        return hora_final;
-    }
-
-    public boolean adicionarAsistencia(String codigo, String estado) {
-        codigos.add(codigo);
-        estados.add(estado);
-        return true;
-    }
-
-    public String consultarAsistencia(String codigo) {
-        for (int vc = 0; vc < codigos.size(); vc++) {
-            if (codigos.get(vc).equalsIgnoreCase(codigo)) {
-                return estados.get(vc);
-            }
+    public void registrarAsistencia(String tipoDoc, String numDoc, String estado) {
+        if (!estado.matches("[0-2]")) {
+            estado = "2";
         }
-        return null;
+        tiposDocumentos.add(tipoDoc);
+        numerosDocumentos.add(numDoc);
+        estados.add(estado);
     }
 
-    public boolean modificarAsistencia(String codigo, String estado) {
-        for (int vc = 0; vc < codigos.size(); vc++) {
-            if (codigos.get(vc).equalsIgnoreCase(codigo)) {
-                estados.set(vc, estado);
+    public boolean modificarAsistencia(String tipoDoc, String numDoc, String nuevoEstado) {
+        for (int i = 0; i < tiposDocumentos.size(); i++) {
+            if (tiposDocumentos.get(i).equalsIgnoreCase(tipoDoc) &&
+                    numerosDocumentos.get(i).equalsIgnoreCase(numDoc)) {
+                estados.set(i, nuevoEstado);
                 return true;
             }
         }
         return false;
     }
-    public boolean setEstados(ArrayList<String> estados) {
-        this.estados = estados;
-        return true;
+
+    public void limpiarRegistros() {
+        tiposDocumentos.clear();
+        numerosDocumentos.clear();
+        estados.clear();
     }
-    public boolean setCodigos(ArrayList<String> codigos) {
-        this.codigos = codigos;
-        return true;
+
+    public ArrayList<String[]> getListaAsistencia() {
+        ArrayList<String[]> lista = new ArrayList<>();
+        for (int i = 0; i < tiposDocumentos.size(); i++) {
+            lista.add(new String[]{
+                    tiposDocumentos.get(i),
+                    numerosDocumentos.get(i),
+                    estados.get(i)
+            });
+        }
+        return lista;
     }
+
+    public String getFecha() { return fecha; }
+    public String getHoraInicio() { return horaInicio; }
+    public String getHoraFinal() { return horaFinal; }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Asistencia [Fecha: ").append(fecha)
-                .append(", Hora Inicio: ").append(hora_de_inicio)
-                .append(", Hora Final: ").append(hora_final)
-                .append("]\nEstudiantes:\n");
+        sb.append("Asistencia del ").append(fecha)
+                .append(" de ").append(horaInicio).append(" a ").append(horaFinal).append("\n");
 
-        for (int i = 0; i < codigos.size(); i++) {
-            sb.append("- ").append(codigos.get(i))
-                    .append(": ").append(estadoToString(estados.get(i)))
-                    .append("\n");
+        for (int i = 0; i < tiposDocumentos.size(); i++) {
+            sb.append("- ").append(tiposDocumentos.get(i)).append(":").append(numerosDocumentos.get(i))
+                    .append(" -> ").append(estadoToString(estados.get(i))).append("\n");
         }
 
         return sb.toString();
@@ -96,9 +76,8 @@ public class Asistencia {
         switch(estado) {
             case "0": return "A tiempo";
             case "1": return "Tarde";
-            case "2": return "No llegó";
+            case "2": return "No asistió";
             default: return "Desconocido";
         }
     }
 }
-

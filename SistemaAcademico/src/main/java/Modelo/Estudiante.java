@@ -12,24 +12,12 @@ public class Estudiante {
     }
 
     // Getters y Setters
-    public String getNombre() {
-        return nombre;
-    }
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-    public String getNumDocumento() {
-        return numDocumento;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-    public void setNumDocumento(String numDocumento) {
-        this.numDocumento = numDocumento;
-    }
+    public String getNombre() { return nombre; }
+    public String getTipoDocumento() { return tipoDocumento; }
+    public String getNumDocumento() { return numDocumento; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
+    public void setNumDocumento(String numDocumento) { this.numDocumento = numDocumento; }
 
     @Override
     public String toString() {

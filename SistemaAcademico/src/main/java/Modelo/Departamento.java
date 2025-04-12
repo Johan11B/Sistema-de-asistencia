@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public class Departamento {
     private String nombre;
-    private static ArrayList<Asignatura> asignaturas = null;
     private static Departamento instancia = null;
-    private static ArrayList<Estudiante> estudiantes = null;
+    private ArrayList<Asignatura> asignaturas = new ArrayList<>();
+    private ArrayList<Estudiante> estudiantes = new ArrayList<>();
 
-    public Departamento() {
+    private Departamento() {
         nombre = "";
-        asignaturas = new ArrayList<Asignatura>();
     }
 
     public static Departamento singleton() {
@@ -19,74 +18,68 @@ public class Departamento {
         }
         return instancia;
     }
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public boolean agregarAsignatura(String nombre, int creditos, String codigo, String grupo, String semestre) {
-        Asignatura asignatura = new Asignatura(codigo, grupo, semestre, nombre, creditos);
-        asignaturas.add(asignatura);
-        return true;
-    }
-    public Asignatura consultarAsignatura(String codigo, String grupo, String semestre) {
-        for(int vc = 0; vc < asignaturas.size(); vc++) {
-            Asignatura copia = asignaturas.get(vc);
-            if(copia.getCodigo().equalsIgnoreCase(codigo) &&
-                    copia.getGrupo().equalsIgnoreCase(grupo) &&
-                    copia.getSemestre().equalsIgnoreCase(semestre)) {
-                return copia;
-            }
-        }
-        return null;
-    }
-    public boolean modificarAsignatura(String codigo, String grupo, String semestre, String nombre, int creditos) {
-        Asignatura asignatura = this.consultarAsignatura(codigo, grupo, semestre);
-        if(asignatura != null) {
-            asignatura.setNombre(nombre);
-            asignatura.setCreditos(creditos);
+
+    // Métodos para departamento
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    // Métodos para estudiantes
+    public boolean agregarEstudiante(Estudiante estudiante) {
+        if (buscarEstudiante(estudiante.getTipoDocumento(), estudiante.getNumDocumento()) == null) {
+            estudiantes.add(estudiante);
             return true;
         }
         return false;
     }
-    public boolean eliminarAsignatura(String codigo, String grupo, String semestre) {
-        for(int vc = 0; vc < asignaturas.size(); vc++) {
-            Asignatura copia = asignaturas.get(vc);
-            if(copia.getCodigo().equalsIgnoreCase(codigo) &&
-                    copia.getGrupo().equalsIgnoreCase(grupo) &&
-                    copia.getSemestre().equalsIgnoreCase(semestre)) {
-                asignaturas.remove(vc);
-                return true;
-            }
-        }
-        return false;
-    }
-    //Agregar estudiante
-    public boolean agregarEstudiante(String nombre, String documento, String identificacion) {
-        Estudiante estudiante = new Estudiante(nombre, documento, identificacion);
-        estudiantes.add(estudiante);
-        return true;
-    }
-    //Consultar estudiante
-    public Estudiante consultarEstudiante(String nombre, String documento, String identificacion) {
-        for(int vc = 0; vc < estudiantes.size(); vc++) {
-            Estudiante copia = estudiantes.get(vc);
-            if(copia.getNombre().equalsIgnoreCase(nombre) &&
-                    copia.getDocumento().equalsIgnoreCase(documento) &&
-                    copia.getIdentificacion().equalsIgnoreCase(identificacion)) {
-                return copia;
+
+    public Estudiante buscarEstudiante(String tipoDoc, String numDoc) {
+        for (Estudiante e : estudiantes) {
+            if (e.getTipoDocumento().equalsIgnoreCase(tipoDoc) &&
+                    e.getNumDocumento().equalsIgnoreCase(numDoc)) {
+                return e;
             }
         }
         return null;
     }
-    //Modificar esetudiantes
-    public boolean modificarEstudiantes(String nombre, String documento, String identificacion) {
-        Estudiante estudiante = this.consultarEstudiante(nombre, documento, identificacion);
-        if(estudiante != null) {
-            estudiante.setNombre(nombre);
-            estudiante.setIdentificacion(identificacion);
-            estudiante.setDocumento(documento);
+
+    public boolean modificarEstudiante(String tipoDocActual, String numDocActual,
+                                       String nuevoNombre, String nuevoTipoDoc, String nuevoNumDoc) {
+        Estudiante estudiante = buscarEstudiante(tipoDocActual, numDocActual);
+        if (estudiante != null) {
+            estudiante.setNombre(nuevoNombre);
+            estudiante.setTipoDocumento(nuevoTipoDoc);
+            estudiante.setNumDocumento(nuevoNumDoc);
+            return true;
+        }
+        return false;
+    }
+
+    // Métodos para asignaturas
+    public boolean agregarAsignatura(Asignatura asignatura) {
+        if (buscarAsignatura(asignatura.getCodigo(), asignatura.getGrupo(), asignatura.getSemestre()) == null) {
+            asignaturas.add(asignatura);
+            return true;
+        }
+        return false;
+    }
+
+    public Asignatura buscarAsignatura(String codigo, String grupo, String semestre) {
+        for (Asignatura a : asignaturas) {
+            if (a.getCodigo().equalsIgnoreCase(codigo) &&
+                    a.getGrupo().equalsIgnoreCase(grupo) &&
+                    a.getSemestre().equalsIgnoreCase(semestre)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public boolean modificarAsignatura(String codigo, String grupo, String semestre,
+                                       String nuevoNombre, String nuevosCreditos) {
+        Asignatura asignatura = buscarAsignatura(codigo, grupo, semestre);
+        if (asignatura != null) {
+            asignatura.setNombre(nuevoNombre);
+            asignatura.setCreditos(String.valueOf(nuevosCreditos));
             return true;
         }
         return false;

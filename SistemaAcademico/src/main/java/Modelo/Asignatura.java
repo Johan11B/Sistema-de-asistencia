@@ -1,14 +1,17 @@
 package Modelo;
+
 import java.util.ArrayList;
+
 public class Asignatura {
-    private String codigo = "";
-    private String grupo = "";
-    private String semestre = "";
-    private String nombre = "";
-    private int creditos = 0;
-    private ArrayList<Asistencia> asistencias = new ArrayList<Asistencia>();
+    private String codigo;
+    private String grupo;
+    private String semestre;
+    private String nombre;
+    private String creditos;
+    private ArrayList<Estudiante> estudiantesInscritos = new ArrayList<>();
+    private ArrayList<Asistencia> asistencias = new ArrayList<>();
 
-    public Asignatura(String codigo, String grupo, String semestre, String nombre, int creditos) {
+    public Asignatura(String codigo, String grupo, String semestre, String nombre, String creditos) {
         this.codigo = codigo;
         this.grupo = grupo;
         this.semestre = semestre;
@@ -16,100 +19,100 @@ public class Asignatura {
         this.creditos = creditos;
     }
 
-    public Asignatura() {
-        // Constructor vacío
-    }
+    public String getCodigo() { return codigo; }
+    public String getGrupo() { return grupo; }
+    public String getSemestre() { return semestre; }
+    public String getNombre() { return nombre; }
+    public String getCreditos() { return creditos; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setCreditos(String creditos) { this.creditos = creditos; }
 
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(String grupo) {
-        this.grupo = grupo;
-    }
-
-    public String getSemestre() {
-        return semestre;
-    }
-
-    public void setSemestre(String semestre) {
-        this.semestre = semestre;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getCreditos() {
-        return creditos;
-    }
-
-    public void setCreditos(int creditos) {
-        this.creditos = creditos;
-    }
-
-    public boolean adicionarAsistencia(String fecha, String hora_inicio, String hora_final,
-                                       ArrayList<String> codigos, ArrayList<String> estados) {
-        Asistencia asistencia = new Asistencia(fecha, hora_inicio, hora_final);
-        for (int vc = 0; vc < codigos.size(); vc++) {
-            String codigo = codigos.get(vc);
-            String estado = estados.get(vc);
-            asistencia.adicionarAsistencia(codigo, estado);
-        }
-        asistencias.add(asistencia);
-        return true;
-    }
-
-    public Asistencia consultarAsistencia(String fecha, String hora_inicio, String hora_final) {
-        for (int vc = 0; vc < asistencias.size(); vc++) {
-            if (asistencias.get(vc).getFecha().equalsIgnoreCase(fecha) &&
-                    asistencias.get(vc).getHora_de_inicio().equalsIgnoreCase(hora_inicio) &&
-                    asistencias.get(vc).getHora_final().equalsIgnoreCase(hora_final)) {
-                return asistencias.get(vc);
-            }
-        }
-        return null;
-    }
-    public boolean modificarAsistencia(String fecha, String hora_inicio, String hora_final,
-                                       String fechan, String hora_inicion, String hora_finaln,
-                                       ArrayList<String> codigos, ArrayList<String> estados) {
-        Asistencia laasistencia = this.consultarAsistencia(fecha, hora_inicio, hora_final);
-        if (laasistencia != null) {
-            laasistencia.setFecha(fechan);
-            laasistencia.setHora_de_inicio(hora_inicion);
-            laasistencia.setHora_final(hora_finaln);
-            laasistencia.setCodigos(codigos);
-            laasistencia.setEstados(estados);
+    public boolean inscribirEstudiante(Estudiante estudiante) {
+        if (!estaInscrito(estudiante)) {
+            estudiantesInscritos.add(estudiante);
             return true;
         }
         return false;
     }
-    public boolean eliminarAsistencia(String fecha, String horaInicio, String horaFinal) {
-        for (int i = 0; i < asistencias.size(); i++) {
-            Asistencia a = asistencias.get(i);
-            if (a.getFecha().equalsIgnoreCase(fecha) &&
-                    a.getHora_de_inicio().equalsIgnoreCase(horaInicio) &&
-                    a.getHora_final().equalsIgnoreCase(horaFinal)) {
-                asistencias.remove(i);
+
+    private boolean estaInscrito(Estudiante estudiante) {
+        for (Estudiante e : estudiantesInscritos) {
+            if (e.getTipoDocumento().equalsIgnoreCase(estudiante.getTipoDocumento()) &&
+                    e.getNumDocumento().equalsIgnoreCase(estudiante.getNumDocumento())) {
                 return true;
             }
         }
         return false;
     }
+
+    private boolean estaInscrito(String tipoDoc, String numDoc) {
+        for (Estudiante e : estudiantesInscritos) {
+            if (e.getTipoDocumento().equalsIgnoreCase(tipoDoc) &&
+                    e.getNumDocumento().equalsIgnoreCase(numDoc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<String[]> getEstudiantesInscritos() {
+        ArrayList<String[]> lista = new ArrayList<>();
+        for (Estudiante e : estudiantesInscritos) {
+            lista.add(new String[]{e.getTipoDocumento(), e.getNumDocumento()});
+        }
+        return lista;
+    }
+
+    public boolean crearAsistenciaVacia(String fecha, String horaInicio, String horaFinal) {
+        if (buscarAsistencia(fecha, horaInicio) == null) {
+            asistencias.add(new Asistencia(fecha, horaInicio, horaFinal));
+            return true;
+        }
+        return false;
+    }
+
+    public Asistencia buscarAsistencia(String fecha, String horaInicio) {
+        String horaNormalizada = horaInicio.length() == 1 ? "0" + horaInicio + ":00" : horaInicio;
+
+        for (Asistencia a : asistencias) {
+            if (a.getFecha().equals(fecha) &&
+                    a.getHoraInicio().equals(horaNormalizada)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public boolean registrarAsistenciaCompleta(String fecha, String horaInicio, String horaFinal,
+                                               ArrayList<String> tiposDocs, ArrayList<String> numsDocs,
+                                               ArrayList<String> estados) {
+        fecha = fecha.trim();
+        horaInicio = horaInicio.length() == 1 ? "0" + horaInicio + ":00" : horaInicio;
+
+        Asistencia asistencia = buscarAsistencia(fecha, horaInicio);
+
+        if (asistencia == null) {
+            asistencia = new Asistencia(fecha, horaInicio, horaFinal);
+            asistencias.add(asistencia);
+        }
+
+        asistencia.limpiarRegistros();
+
+        for (int i = 0; i < tiposDocs.size(); i++) {
+            if (estaInscrito(tiposDocs.get(i), numsDocs.get(i))) {
+                asistencia.registrarAsistencia(tiposDocs.get(i), numsDocs.get(i), estados.get(i));
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<String[]> consultarAsistencia(String fecha, String horaInicio) {
+        Asistencia a = buscarAsistencia(fecha, horaInicio);
+        return a != null ? a.getListaAsistencia() : null;
+    }
+
     @Override
-    public String toString(){
-        return ":"+getNombre();
+    public String toString() {
+        return nombre + " (" + codigo + ") - Grupo: " + grupo + " - Semestre: " + semestre;
     }
 }

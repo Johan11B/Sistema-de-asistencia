@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.ElControlador;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,120 +11,110 @@ public class Main {
         ElControlador controlador = new ElControlador();
         String opcion = "";
 
-        while (!opcion.equals("4")) {
+        while (!opcion.equals("15")) {
             System.out.println("\n***** SISTEMA DE GESTIÓN ACADÉMICA *****");
-            System.out.println("1) Gestión de Departamentos");
-            System.out.println("2) Gestión de Asignaturas");
-            System.out.println("3) Gestión de Asistencias");
-            System.out.println("4) Salir");
-            System.out.print("Digite la opción deseada: ");
-            opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    menuDepartamentos(controlador, scanner);
-                    break;
-                case "2":
-                    menuAsignaturas(controlador, scanner);
-                    break;
-                case "3":
-                    menuAsistencias(controlador, scanner);
-                    break;
-                case "4":
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción no válida, intente de nuevo.");
-            }
-        }
-        scanner.close();
-    }
-
-    private static void menuDepartamentos(ElControlador controlador, Scanner scanner) {
-        String opcion = "";
-        while (!opcion.equals("4")) {
-            System.out.println("\n***** GESTIÓN DE DEPARTAMENTOS *****");
-            System.out.println("1) Crear Departamento");
-            System.out.println("2) Consultar Departamento");
-            System.out.println("3) Actualizar Departamento");
-            System.out.println("4) Volver al menú principal");
+            System.out.println("1. Consultar departamento");
+            System.out.println("2. Modificar departamento");
+            System.out.println("3. Registrar estudiante en departamento");
+            System.out.println("4. Consultar estudiante en departamento");
+            System.out.println("5. Modificar estudiante en departamento");
+            System.out.println("6. Agregar asignatura");
+            System.out.println("7. Consultar asignatura");
+            System.out.println("8. Modificar asignatura");
+            System.out.println("9. Registrar estudiante en asignatura");
+            System.out.println("10. Consultar estudiantes en asignatura");
+            System.out.println("11. Crear lista de asistencia vacía");
+            System.out.println("12. Llenar asistencia");
+            System.out.println("13. Modificar asistencia");
+            System.out.println("14. Consultar asistencia");
+            System.out.println("15. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextLine();
 
             switch (opcion) {
                 case "1":
-                    System.out.print("Nombre del Departamento: ");
-                    String nombre = scanner.nextLine();
-                    controlador.crearDepartamento(nombre);
-                    System.out.println("Departamento creado exitosamente.");
+                    System.out.println("------------------------");
+                    System.out.println("Nombre departamento: " + controlador.consultarDepartamento());
+                    System.out.println("------------------------");
                     break;
                 case "2":
-                    String nombreDepto = controlador.consultarDepartamento();
-                    System.out.println("Nombre del Departamento: " + nombreDepto);
+                    System.out.println("------------------------");
+                    System.out.print("Nuevo nombre: ");
+                    controlador.actualizarDepartamento(scanner.nextLine());
+                    System.out.println("------------------------");
                     break;
                 case "3":
-                    System.out.print("Nuevo nombre del Departamento: ");
+                    System.out.println("------------------------");
+                    System.out.print("Nombre: ");
+                    String nombre = scanner.nextLine();
+                    System.out.print("Tipo documento: ");
+                    String tipoDoc = scanner.nextLine();
+                    System.out.print("Número documento: ");
+                    String numDoc = scanner.nextLine();
+                    controlador.registrarEstudiante(nombre, tipoDoc, numDoc);
+                    System.out.println("------------------------");
+                    break;
+                case "4":
+                    System.out.println("------------------------");
+                    System.out.print("Tipo documento: ");
+                    tipoDoc = scanner.nextLine();
+                    System.out.print("Número documento: ");
+                    numDoc = scanner.nextLine();
+                    String nombreEst = controlador.consultarEstudiante(tipoDoc, numDoc);
+                    System.out.println(nombreEst != null ? "Estudiante: " + nombreEst : "No encontrado");
+                    System.out.println("------------------------");
+                    break;
+                case "5":
+                    System.out.println("------------------------");
+                    System.out.print("Tipo documento actual: ");
+                    String tipoDocActual = scanner.nextLine();
+                    System.out.print("Número documento actual: ");
+                    String numDocActual = scanner.nextLine();
+                    System.out.println("------------------------");
+                    System.out.print("Nuevo nombre: ");
                     String nuevoNombre = scanner.nextLine();
-                    controlador.actualizarDepartamento(nuevoNombre);
-                    System.out.println("Departamento actualizado exitosamente.");
+                    System.out.print("Nuevo tipo documento: ");
+                    String nuevoTipoDoc = scanner.nextLine();
+                    System.out.print("Nuevo número documento: ");
+                    String nuevoNumDoc = scanner.nextLine();
+                    controlador.modificarEstudiante(tipoDocActual, numDocActual, nuevoNombre, nuevoTipoDoc, nuevoNumDoc);
+                    System.out.println("-------------------------");
                     break;
-                case "4":
-                    break;
-                default:
-                    System.out.println("Opción no válida, intente de nuevo.");
-            }
-        }
-    }
-
-    private static void menuAsignaturas(ElControlador controlador, Scanner scanner) {
-        String opcion = "";
-        while (!opcion.equals("5")) {
-            System.out.println("\n***** GESTIÓN DE ASIGNATURAS *****");
-            System.out.println("1) Agregar Asignatura");
-            System.out.println("2) Consultar Asignatura");
-            System.out.println("3) Modificar Asignatura");
-            System.out.println("4) Eliminar Asignatura");
-            System.out.println("5) Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    System.out.print("Nombre de la Asignatura: ");
-                    String nombre = scanner.nextLine();
-                    System.out.print("Código de la Asignatura: ");
+                case "6":
+                    System.out.println("------------------------");
+                    System.out.print("Nombre asignatura: ");
+                    nombre = scanner.nextLine();
+                    System.out.print("Código: ");
                     String codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
                     String grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
                     String semestre = scanner.nextLine();
                     System.out.print("Créditos: ");
-                    int creditos = Integer.parseInt(scanner.nextLine());
-
-                    boolean agregada = controlador.agregarAsignatura(nombre, creditos, codigo, grupo, semestre);
-                    if (agregada) {
-                        System.out.println("Asignatura añadida correctamente.");
-                    } else {
-                        System.out.println("Error al agregar la asignatura.");
-                    }
+                    String creditos = scanner.nextLine();
+                    controlador.agregarAsignatura(nombre, codigo, grupo, semestre, creditos);
+                    System.out.println("------------------------");
                     break;
-                case "2":
-                    System.out.print("Código de la Asignatura: ");
+                case "7":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
                     codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
                     grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
                     semestre = scanner.nextLine();
-
-                    Object asignatura = controlador.consultarAsignatura(codigo, grupo, semestre);
-                    if (asignatura != null) {
-                        System.out.println("Asignatura encontrada: " + asignatura.toString());
+                    System.out.println("------------------------");
+                    String[] datosAsig = controlador.consultarAsignatura(codigo, grupo, semestre);
+                    if (datosAsig != null) {
+                        System.out.println("Nombre: " + datosAsig[0] + ", Créditos: " + datosAsig[1]);
+                        System.out.println("------------------------");
                     } else {
-                        System.out.println("Asignatura no encontrada.");
+                        System.out.println("Asignatura no encontrada");
                     }
                     break;
-                case "3":
-                    System.out.print("Código de la Asignatura a modificar: ");
+                case "8":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
                     codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
                     grupo = scanner.nextLine();
@@ -132,201 +123,204 @@ public class Main {
                     System.out.print("Nuevo nombre: ");
                     nombre = scanner.nextLine();
                     System.out.print("Nuevos créditos: ");
-                    creditos = Integer.parseInt(scanner.nextLine());
-
-                    boolean modificada = controlador.modificarAsignatura(codigo, grupo, semestre, nombre, creditos);
-                    if (modificada) {
-                        System.out.println("Asignatura modificada correctamente.");
-                    } else {
-                        System.out.println("Error al modificar la asignatura.");
-                    }
+                    creditos = scanner.nextLine();
+                    System.out.println("------------------------");
+                    controlador.modificarAsignatura(codigo, grupo, semestre, nombre, creditos);
                     break;
-                case "4":
-                    System.out.print("Código de la Asignatura a eliminar: ");
+                case "9":
+                    System.out.println("------------------------");
+                    System.out.print("Tipo documento: ");
+                    tipoDoc = scanner.nextLine();
+                    System.out.print("Número documento: ");
+                    numDoc = scanner.nextLine();
+                    System.out.print("Código asignatura: ");
                     codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
                     grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
                     semestre = scanner.nextLine();
-
-                    boolean eliminada = controlador.eliminarAsignatura(codigo, grupo, semestre);
-                    if (eliminada) {
-                        System.out.println("Asignatura eliminada correctamente.");
-                    } else {
-                        System.out.println("Error al eliminar la asignatura.");
+                    System.out.println("------------------------");
+                    controlador.inscribirEstudianteAsignatura(tipoDoc, numDoc, codigo, grupo, semestre);
+                    break;
+                case "10":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
+                    codigo = scanner.nextLine();
+                    System.out.print("Grupo: ");
+                    grupo = scanner.nextLine();
+                    System.out.print("Semestre: ");
+                    semestre = scanner.nextLine();
+                    ArrayList<String[]> estudiantes = controlador.consultarEstudiantesAsignatura(codigo, grupo, semestre);
+                    if (estudiantes != null) {
+                        for (String[] est : estudiantes) {
+                            System.out.println("----------------------------------------------------");
+                            System.out.println("Tipo doc: " + est[0] + ", Número doc: " + est[1]);
+                            System.out.println("----------------------------------------------------");
+                        }
                     }
                     break;
-                case "5":
-                    break;
-                default:
-                    System.out.println("Opción no válida, intente de nuevo.");
-            }
-        }
-    }
-
-    private static void menuAsistencias(ElControlador controlador, Scanner scanner) {
-        String opcion = "";
-        while (!opcion.equals("5")) {
-            System.out.println("\n***** GESTIÓN DE ASISTENCIAS *****");
-            System.out.println("1) Registrar Asistencia");
-            System.out.println("2) Consultar Asistencia");
-            System.out.println("3) Modificar Asistencia");
-            System.out.println("4) Eliminar Asistencia");
-            System.out.println("5) Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    System.out.print("Código de la Asignatura: ");
-                    String codigo = scanner.nextLine();
+                case "11":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
+                    codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
-                    String grupo = scanner.nextLine();
+                    grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
-                    String semestre = scanner.nextLine();
-                    System.out.print("Fecha de la Asistencia (aaaa/mm/dd): ");
+                    semestre = scanner.nextLine();
+                    System.out.print("Fecha (aaaa/mm/dd): ");
                     String fecha = scanner.nextLine();
-                    System.out.print("Hora de Inicio (hh:mm): ");
+                    while (!fecha.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                        System.out.println("Formato inválido. Use aaaa/mm/dd");
+                        fecha = scanner.nextLine();
+                    }
+                    System.out.print("Hora inicio (hh:mm): ");
                     String horaInicio = scanner.nextLine();
-                    System.out.print("Hora Final (hh:mm): ");
+                    while (!horaInicio.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaInicio = scanner.nextLine();
+                    }
+                    System.out.print("Hora final (hh:mm): ");
                     String horaFinal = scanner.nextLine();
+                    while (!horaFinal.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaFinal = scanner.nextLine();
+                    }
+                    controlador.crearAsistenciaVacia(codigo, grupo, semestre, fecha, horaInicio, horaFinal);
+                    break;
+                case "12":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
+                    codigo = scanner.nextLine();
+                    System.out.print("Grupo: ");
+                    grupo = scanner.nextLine();
+                    System.out.print("Semestre: ");
+                    semestre = scanner.nextLine();
+                    System.out.print("Fecha (aaaa/mm/dd): ");
+                    fecha = scanner.nextLine();
+                    while (!fecha.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                        System.out.println("Formato inválido. Use aaaa/mm/dd");
+                        fecha = scanner.nextLine();
+                    }
+                    System.out.print("Hora inicio (hh:mm): ");
+                    horaInicio = scanner.nextLine();
+                    while (!horaInicio.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaInicio = scanner.nextLine();
+                    }
+                    System.out.print("Hora final (hh:mm): ");
+                    horaFinal = scanner.nextLine();
+                    while (!horaFinal.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaFinal = scanner.nextLine();
+                    }
+                    System.out.println("------------------------");
 
-                    ArrayList<String> codigosAA = new ArrayList<>();
+                    ArrayList<String> tiposDocs = new ArrayList<>();
+                    ArrayList<String> numsDocs = new ArrayList<>();
                     ArrayList<String> estados = new ArrayList<>();
 
-                    System.out.print("Número de estudiantes: ");
-                    int numEstudiantes = Integer.parseInt(scanner.nextLine());
-
-                    for (int i = 0; i < numEstudiantes; i++) {
-                        System.out.print("Código del estudiante " + (i + 1) + ": ");
-                        String codigoEstudiante = scanner.nextLine();
-                        System.out.print("Estado (0: A tiempo, 1: tarde, 2: no llegó): ");
-                        String estado = scanner.nextLine();
-
-                        codigosAA.add(codigoEstudiante);
-                        estados.add(estado);
+                    System.out.println("------------------------");
+                    System.out.print("Cantidad de estudiantes: ");
+                    int cantidad = Integer.parseInt(scanner.nextLine());
+                    for (int i = 0; i < cantidad; i++) {
+                        System.out.print("Tipo documento " + (i+1) + ": ");
+                        tiposDocs.add(scanner.nextLine());
+                        System.out.print("Número documento " + (i+1) + ": ");
+                        numsDocs.add(scanner.nextLine());
+                        System.out.print("Estado (0/1/2) " + (i+1) + ": ");
+                        estados.add(scanner.nextLine());
+                        System.out.println("------------------------");
                     }
-
-                    boolean resultado = controlador.adicionarAsistencia(codigo, grupo, semestre, fecha, horaInicio, horaFinal, codigosAA, estados);
-                    if (resultado) {
-                        System.out.println("Asistencia registrada correctamente.");
-                    } else {
-                        System.out.println("Error al registrar la asistencia.");
-                    }
+                    controlador.llenarAsistencia(codigo, grupo, semestre, fecha, horaInicio, horaFinal, tiposDocs, numsDocs, estados);
                     break;
-                case "2":
-                    System.out.print("Código de la Asignatura: ");
+                case "13":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
                     codigo = scanner.nextLine();
                     System.out.print("Grupo: ");
                     grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
                     semestre = scanner.nextLine();
-                    System.out.print("Fecha de la Asistencia (aaaa/mm/dd): ");
+                    System.out.print("Fecha (aaaa/mm/dd): ");
                     fecha = scanner.nextLine();
-                    System.out.print("Hora de Inicio (hh:mm): ");
+                    while (!fecha.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                        System.out.println("Formato inválido. Use aaaa/mm/dd");
+                        fecha = scanner.nextLine();
+                    }
+                    System.out.print("Hora inicio (hh:mm): ");
                     horaInicio = scanner.nextLine();
+                    while (!horaInicio.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaInicio = scanner.nextLine();
+                    }
+                    System.out.print("Tipo documento: ");
+                    tipoDoc = scanner.nextLine();
+                    System.out.print("Número documento: ");
+                    numDoc = scanner.nextLine();
+                    System.out.println("------------------------");
+                    System.out.print("Nuevo estado (0/1/2): ");
+                    String estado = scanner.nextLine();
+                    System.out.println("------------------------");
+                    controlador.modificarAsistencia(codigo, grupo, semestre, fecha, horaInicio, tipoDoc, numDoc, estado);
+                    break;
+                case "14":
+                    System.out.println("------------------------");
+                    System.out.print("Código: ");
+                    codigo = scanner.nextLine();
+                    System.out.print("Grupo: ");
+                    grupo = scanner.nextLine();
+                    System.out.print("Semestre: ");
+                    semestre = scanner.nextLine();
+                    System.out.print("Fecha (aaaa/mm/dd): ");
+                    fecha = scanner.nextLine();
+                    while (!fecha.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                        System.out.println("Formato inválido. Use aaaa/mm/dd");
+                        fecha = scanner.nextLine();
+                    }
+                    System.out.print("Hora inicio (hh:mm): ");
+                    horaInicio = scanner.nextLine();
+                    while (!horaInicio.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaInicio = scanner.nextLine();
+                    }
                     System.out.print("Hora Final (hh:mm): ");
                     horaFinal = scanner.nextLine();
+                    while (!horaFinal.matches("\\d{1,2}:\\d{2}")) {
+                        System.out.println("Formato inválido. Use hh:mm");
+                        horaFinal = scanner.nextLine();
+                    }
+                    String[] llamarNombre = controlador.consultarAsignatura(codigo, grupo, semestre);
+                    String nombreAsignatura = llamarNombre != null ? llamarNombre[0] : "Asignatura no encontrada";
 
-                    Object asistencia = controlador.consultarAsistencia(codigo, grupo, semestre, fecha, horaInicio, horaFinal);
-                    if (asistencia != null) {
-                        System.out.println("Asistencia encontrada: " + asistencia.toString());
+                    ArrayList<String[]> listaAsistencia = controlador.consultarAsistencia(
+                            codigo, grupo, semestre, fecha, horaInicio);
+
+                    if (listaAsistencia != null && !listaAsistencia.isEmpty()) {
+                        System.out.println("\n--- REGISTRO DE ASISTENCIA ---");
+                        System.out.println("Asignatura: " +nombreAsignatura+" -Codigo "+ codigo + " - Grupo: " + grupo);
+                        System.out.println("Fecha: " + fecha + " Hora de inicio: " + horaInicio+ "Hora final: "+horaFinal+" |");
+                        System.out.println("--------------------------------");
+
+                        for (String[] reg : listaAsistencia) {
+                            String estadoStr = switch(reg[2]) {
+                                case "0" -> "Llego a tiempo";
+                                case "1" -> "Asistió tarde";
+                                case "2" -> "Falto";
+                                default -> "Estado desconocido";
+                            };
+                            System.out.println(reg[0] + " " + reg[1] + ": " + estadoStr);
+                        }
                     } else {
-                        System.out.println("Asistencia no encontrada.");
+                        System.out.println("No se encontraron registros de asistencia");
                     }
                     break;
-                case "3":
-                    System.out.print("Código de la Asignatura: ");
-                    codigo = scanner.nextLine();
-                    System.out.print("Grupo: ");
-                    grupo = scanner.nextLine();
-                    System.out.print("Semestre: ");
-                    semestre = scanner.nextLine();
-                    System.out.println("Datos actuales de la asistencia:");
-                    System.out.print("Fecha actual (aaaa/mm/dd): ");
-                    fecha = scanner.nextLine();
-                    System.out.print("Hora de Inicio actual (hh:mm): ");
-                    horaInicio = scanner.nextLine();
-                    System.out.print("Hora Final actual (hh:mm): ");
-                    horaFinal = scanner.nextLine();
-
-                    System.out.println("\nNuevos datos de la asistencia:");
-                    System.out.print("Nueva fecha (aaaa/mm/dd): ");
-                    String nuevaFecha = scanner.nextLine();
-                    System.out.print("Nueva hora de Inicio (hh:mm): ");
-                    String nuevaHoraInicio = scanner.nextLine();
-                    System.out.print("Nueva hora Final (hh:mm): ");
-                    String nuevaHoraFinal = scanner.nextLine();
-
-                    codigosAA = new ArrayList<>();
-                    estados = new ArrayList<>();
-
-                    System.out.print("Número de estudiantes: ");
-                    numEstudiantes = Integer.parseInt(scanner.nextLine());
-
-                    for (int i = 0; i < numEstudiantes; i++) {
-                        System.out.print("Código del estudiante " + (i + 1) + ": ");
-                        String codigoEstudiante = scanner.nextLine();
-                        System.out.print("Estado (0: A tiempo, 1: tarde, 2: no llegó): ");
-                        String estado = scanner.nextLine();
-
-                        codigosAA.add(codigoEstudiante);
-                        estados.add(estado);
-                    }
-
-                    boolean modificada = controlador.modificarAsistencia(codigo, grupo, semestre,
-                            fecha, horaInicio, horaFinal,
-                            nuevaFecha, nuevaHoraInicio, nuevaHoraFinal,
-                            codigosAA, estados);
-                    if (modificada) {
-                        System.out.println("Asistencia modificada correctamente.");
-                    } else {
-                        System.out.println("Error al modificar la asistencia.");
-                    }
-                    break;
-                case "4":
-                    System.out.print("Código de la Asignatura: ");
-                    codigo = scanner.nextLine();
-                    System.out.print("Grupo: ");
-                    grupo = scanner.nextLine();
-                    System.out.print("Semestre: ");
-                    semestre = scanner.nextLine();
-                    System.out.print("Fecha de la Asistencia (aaaa/mm/dd): ");
-                    fecha = scanner.nextLine();
-                    System.out.print("Hora de Inicio (hh:mm): ");
-                    horaInicio = scanner.nextLine();
-                    System.out.print("Hora Final (hh:mm): ");
-                    horaFinal = scanner.nextLine();
-
-                    boolean eliminada = controlador.eliminarAsistencia(codigo, grupo, semestre, fecha, horaInicio, horaFinal);
-                    if (eliminada) {
-                        System.out.println("Asistencia eliminada correctamente.");
-                    } else {
-                        System.out.println("Error al eliminar la asistencia.");
-                    }
-                    break;
-                case "5":
+                case "15":
+                    System.out.println("Cerrando programa");
                     break;
                 default:
-                    System.out.println("Opción no válida, intente de nuevo.");
+                    System.out.println("Opción no válida");
             }
         }
+        scanner.close();
     }
-}/*
-*1. Consultar departamento--->mostrar nombre del departamento.
-*2. Modificar departamento---->Cambiar el nombre del departamento.
-*3. Registar estudiantes en el departamento----> nombre, tipo de documento, pedir el numero de documento.
-*4. Consultar estudiantes en el departamento----> Buscar Tipo de documento, numero de documento. Muestra el nombre
-*5  Modificar estudiante en el departamento----> Busca tipo de documento, numero de documento. Se cambia el nombre, tipo de documento.
-*6. Agregar Asignatura----> Nombre, codigo (CAD-1), creditos, sección (numero de grupo)(401M o 402M), semestre(2024-1 2024-2).
-*7. Consultar Asignatura---> buscar con el codigo, semestre y sección. Muestra--->el nombre y los creditos
-*8. Modificar Asignatura-----> buscar con el codigo, seccion y semestre. Cambiar--->El nombre y creditos.
-*9. Registrar estudiante en asiganatura------>Tipo de documento, numero de documento, semestre, codigo, sección.
------Dos arreglos de tipo string, tipo de documento, numero de documento----------------
-*10. Consultar estudiantes en asignatura-----> buscar semestre, seccion, codigo. Devolver los tipos de documento y el documento.
-*11. Crear lista de asistencia vacia-----> Asigantura: Semestre, sección, codigo, Fecha, hora de inicio. Estado de que ninguno asistio. Lista tipos, numero, hora, fecha.
-*12. Llenar asistencia-------> Buscar por  asignatura, hora, fecha. devolver los dos arrglos tipo y numero de documento, cambiar el estado.
-*13. Modificar asistencia------>Buscar codigo, semestre, grupo,
-*14. Consulaar asistencia------>Buecar codigo, semestre, grupo,
-*15. Salir
- /
+}
