@@ -41,6 +41,7 @@ public class Main {
                     System.out.println("------------------------");
                     System.out.print("Nuevo nombre: ");
                     controlador.actualizarDepartamento(scanner.nextLine());
+                    System.out.println("Departamento creado con exito!!!");
                     System.out.println("------------------------");
                     break;
                 case "3":
@@ -52,6 +53,7 @@ public class Main {
                     System.out.print("Número documento: ");
                     String numDoc = scanner.nextLine();
                     controlador.registrarEstudiante(nombre, tipoDoc, numDoc);
+                    System.out.println("Estudiante registrado exitosamente!!!");
                     System.out.println("------------------------");
                     break;
                 case "4":
@@ -78,6 +80,7 @@ public class Main {
                     System.out.print("Nuevo número documento: ");
                     String nuevoNumDoc = scanner.nextLine();
                     controlador.modificarEstudiante(tipoDocActual, numDocActual, nuevoNombre, nuevoTipoDoc, nuevoNumDoc);
+                    System.out.println("Estudiante modificado!!!");
                     System.out.println("-------------------------");
                     break;
                 case "6":
@@ -93,6 +96,7 @@ public class Main {
                     System.out.print("Créditos: ");
                     String creditos = scanner.nextLine();
                     controlador.agregarAsignatura(nombre, codigo, grupo, semestre, creditos);
+                    System.out.println("Asignatura agregada correctamente!!!");
                     System.out.println("------------------------");
                     break;
                 case "7":
@@ -124,8 +128,9 @@ public class Main {
                     nombre = scanner.nextLine();
                     System.out.print("Nuevos créditos: ");
                     creditos = scanner.nextLine();
-                    System.out.println("------------------------");
                     controlador.modificarAsignatura(codigo, grupo, semestre, nombre, creditos);
+                    System.out.println("Asignatura modificada");
+                    System.out.println("------------------------");
                     break;
                 case "9":
                     System.out.println("------------------------");
@@ -139,6 +144,7 @@ public class Main {
                     grupo = scanner.nextLine();
                     System.out.print("Semestre: ");
                     semestre = scanner.nextLine();
+                    System.out.println("Estudiante registrado!!!");
                     System.out.println("------------------------");
                     controlador.inscribirEstudianteAsignatura(tipoDoc, numDoc, codigo, grupo, semestre);
                     break;
@@ -185,6 +191,7 @@ public class Main {
                         System.out.println("Formato inválido. Use hh:mm");
                         horaFinal = scanner.nextLine();
                     }
+                    System.out.println("Lista creada!!!");
                     controlador.crearAsistenciaVacia(codigo, grupo, semestre, fecha, horaInicio, horaFinal);
                     break;
                 case "12":
@@ -260,6 +267,7 @@ public class Main {
                     System.out.println("------------------------");
                     System.out.print("Nuevo estado (0/1/2): ");
                     String estado = scanner.nextLine();
+                    System.out.println("Asistencia modificada!!!");
                     System.out.println("------------------------");
                     controlador.modificarAsistencia(codigo, grupo, semestre, fecha, horaInicio, tipoDoc, numDoc, estado);
                     break;
@@ -298,8 +306,7 @@ public class Main {
                     if (listaAsistencia != null && !listaAsistencia.isEmpty()) {
                         System.out.println("\n--- REGISTRO DE ASISTENCIA ---");
                         System.out.println("Asignatura: " +nombreAsignatura+" -Codigo "+ codigo + " - Grupo: " + grupo);
-                        System.out.println("Fecha: " + fecha + " Hora de inicio: " + horaInicio+ "Hora final: "+horaFinal+" |");
-                        System.out.println("--------------------------------");
+                        System.out.println("Fecha: " + fecha + " Hora de inicio: " + horaInicio+ " Hora final: "+horaFinal+" |");
 
                         for (String[] reg : listaAsistencia) {
                             String estadoStr = switch(reg[2]) {
@@ -308,7 +315,9 @@ public class Main {
                                 case "2" -> "Falto";
                                 default -> "Estado desconocido";
                             };
+                            System.out.println("--------------------------------");
                             System.out.println(reg[0] + " " + reg[1] + ": " + estadoStr);
+                            System.out.println("--------------------------------");
                         }
                     } else {
                         System.out.println("No se encontraron registros de asistencia");
